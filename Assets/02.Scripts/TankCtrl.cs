@@ -58,7 +58,7 @@ public class TankCtrl : MonoBehaviour,IPunObservable
             {   
                 pv.RPC("Fire",RpcTarget.All,pv.Owner.NickName);
                 // pv.RPC("Fire",RpcTarget.AllViaServer,"^0^");
-                //i=0;
+                i=0;
             }
 
             if(Input.GetMouseButton(0))
@@ -75,9 +75,21 @@ public class TankCtrl : MonoBehaviour,IPunObservable
             {
                 pv.RPC("Fire",RpcTarget.All,pv.Owner.NickName);
             }
-            
             float r = Input.GetAxis("Mouse ScrollWheel");
             cannonMesh.Rotate(Vector3.right*Time.deltaTime*rot*r);
+        }
+        else
+        {
+            if((tr.position-receivePos).sqrMagnitude>9.0f)
+            {
+                tr.position = receivePos;
+            }
+            else
+            {
+                tr.position = Vector3.Lerp(tr.position,receivePos,Time.deltaTime*10.0f);
+            }
+            
+            tr.rotation = Quaternion.Slerp(tr.rotation,receiveRot,Time.deltaTime*10.0f);
         }
 
     }
